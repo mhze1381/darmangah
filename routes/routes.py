@@ -66,7 +66,7 @@ def dashboard():
         Patient.national_code.contains(search) ,
         Patient.phone.contains(search)
         )
-        .all())
+        ).all()
     else:
         
         patients = Patient.query.all()
