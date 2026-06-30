@@ -7,13 +7,14 @@ class Insurance(db.Model):
     id = db.Column(db.Integer , primary_key=True)
     name = db.Column(db.String(100) , unique=True , nullable=False)
  
-class Proceduree (db.Model):
+class Procedure (db.Model):
     id = db.Column(db.Integer , primary_key=True)
     name = db.Column(db.String(100) , unique=True , nullable=False)
 
-    class Tariff(db.Model):
+class Tariff(db.Model):
        id = db.Column(db.Integer , primary_key=True)
-       Insurance_id = db.Column (db.Integer , db.Foreignkey("insurance_id") , nullable=False)
+       insurance_id = db.Column (db.Integer , db.ForeignKey("insurance.id") , nullable=False)
+       procedure_id = db.Column (db.Integer , db.ForeignKey("procedure.id") , nullable=False )
        price = db.Column(db.Integer , nullable=False)
 
 
@@ -30,9 +31,9 @@ class Patient(db.Model):
     description = db.Column(db.Text)
     total_price = db.Column(db.Integer , default=0)
     paid_price = db.Column(db.Integer , default=0)
-    insurance_id = db.Column (db.Integer , db.ForeignKey("insurance_id") , nullable=False )
-    procedure_id = db.Column (db.Integer , db.ForeignKey("procedure_id") , nullable=False )
-    insurance = db.relationship("Incurance")
+    insurance_id = db.Column (db.Integer , db.ForeignKey("insurance.id") , nullable=False )
+    procedure_id = db.Column (db.Integer , db.ForeignKey("procedure.id") , nullable=False )
+    insurance = db.relationship("Insurance")
     procedure = db.relationship("Procedure")
-    paid_price = db.Column(db.Integer , default=0)
+  
 
