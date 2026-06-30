@@ -1,3 +1,4 @@
+
 from extension import db
 
 class Patient(db.Model):

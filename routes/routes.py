@@ -24,7 +24,8 @@ def login():
             return redirect(url_for("main_up.dashboard"))
 
     return render_template("login.html")
-  
+
+
 
 @main_up.route("/add-patient", methods=["GET", "POST"])
 def add_patient():
@@ -44,8 +45,7 @@ def add_patient():
         return redirect(url_for("main_up.dashboard"))
 
     return render_template("add_patient.html")
-          
-          
+
 @main_up.route("/")
 def home ():
     return render_template("login.html")
