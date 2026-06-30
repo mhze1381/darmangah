@@ -3,6 +3,20 @@ class User(db.Model):
     id = db.Column( db.Integer , primary_key=True )
     username = db.Column(db.String(80) , unique=True , nullable=False )
     password = db.Column(db.String(255) , nullable = False)
+class Insurance(db.Model):
+    id = db.Column(db.Integer , primary_key=True)
+    name = db.Column(db.String(100) , unique=True , nullable=False)
+ 
+class Proceduree (db.Model):
+    id = db.Column(db.Integer , primary_key=True)
+    name = db.Column(db.String(100) , unique=True , nullable=False)
+
+    class Tariff(db.Model):
+       id = db.Column(db.Integer , primary_key=True)
+       Insurance_id = db.Column (db.Integer , db.Foreignkey("insurance_id") , nullable=False)
+       price = db.Column(db.Integer , nullable=False)
+
+
 
 class Patient(db.Model):
 
@@ -15,5 +29,10 @@ class Patient(db.Model):
 
     description = db.Column(db.Text)
     total_price = db.Column(db.Integer , default=0)
+    paid_price = db.Column(db.Integer , default=0)
+    insurance_id = db.Column (db.Integer , db.Foreignkey("insurance_id") , nullable=False )
+    procedure_id = db.Column (db.Integer , db.Foreignkey("procedure_id") , nullable=False )
+    insurance = db.relationship("Incurance")
+    procedure = db.relationship("Procedure")
     paid_price = db.Column(db.Integer , default=0)
 
