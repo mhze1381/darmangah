@@ -47,20 +47,36 @@ def add_patient():
 
     return render_template("add_patient.html")
 
+
+
 @main_up.route("/")
 def home ():
     return render_template("login.html")
+
  
 @main_up.route("/dashboard")
 def dashboard():
     patients = Patient.query.all()
     print("patients")
     return render_template("dashboard.html" , patients = patients)
+
+
 @main_up.route("/delete-patient/<int:id>")
 def delete_patient(id):
     patient = Patient.query.get_or_404(id)
     db.session.delete(patient)
     db.session.commit()
     return redirect(url_for("main_up.dashboard"))
-    
-
+@main_up.route("/edit-patient/ <int:id>" , methods=["GET" , "POST"])
+def edit_patient(id):
+    patient = Patient.query.get_or_404(id)
+    if request.method == "POST" :
+        patient.full_name = request.form["full_name"]
+        patient.national_code = request.form[national_code]
+        patient.phone = request.form[phone]
+        patient.age = request.form[age]
+        patient.gender = request.form[gender]
+        patient.description = request.form[description]
+        db.session.commit()
+        return redirect(url_for("main_up.dashboard"))
+    return render_template("edit_patient.html , patient=patient")
