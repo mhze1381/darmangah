@@ -3,6 +3,7 @@ from flask_login import LoginManager
 from flask import Blueprint , render_template , request , redirect , url_for 
 from models import User , Patient
 from extension import db
+from sqlalchemy import or_
 
 main_up = Blueprint("main_up" , __name__)
 login_bp = Blueprint("login" , __name__)
@@ -56,11 +57,22 @@ def home ():
     return render_template("login.html")
 
  
-@main_up.route("/dashboard")
+@main_up.route("/dashboard") 
 def dashboard():
-    patients = Patient.query.all()
-    print("patients")
-    return render_template("dashboard.html" , patients = patients)
+    search = request.args.get("search")
+    if search :
+        patients = Patient.query.filter(or_(
+        Patient.full_name.contains(search) ,
+        Patient.national_code.contains(search) ,
+        Patient.phone.contains(search)
+        )
+        .all())
+    else:
+        
+        patients = Patient.query.all()
+        print("patients")
+        return render_template("dashboard.html" , patients = patients)
+    
 
 
 @main_up.route("/delete-patient/<int:id>")
