@@ -10,11 +10,14 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        print(username)
+        print(password)
 
         user = User.query.filter_by(
             username=username,
             password=password
         ).first()
+        print(user)
 
         if user:
             return redirect(url_for("main_up.dashboard"))

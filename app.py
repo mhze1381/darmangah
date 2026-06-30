@@ -14,7 +14,7 @@ with app.app_context():
 
     if not User.query.filter_by(username="darmangeh").first():
         user = User(
-            username="darmangeh",
+            username="darmangah",
             password="12345678"
         )
         db.session.add(user)
