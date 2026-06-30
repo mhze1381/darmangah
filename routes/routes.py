@@ -1,7 +1,7 @@
 from flask import Blueprint  , render_template
 from flask_login import LoginManager
 from flask import Blueprint , render_template , request , redirect , url_for 
-from models import User , Patient
+from models import User , Patient , Insurance
 from extension import db
 from sqlalchemy import or_
 
@@ -95,3 +95,12 @@ def edit_patient(id):
         print("update")
         return redirect(url_for("main_up.dashboard"))
     return render_template("edit_patient.html" , patient = patient)
+@main_up.route("/insurance" , methods=["GET" , "POST"])
+def insurance():
+    if request.method == "POST":
+        insurance = Insurance ( name = request.form["name"])
+        db.session.commit()
+        return 
+        redirect(url_for("main_up.insurance"))
+    insurance = Insurance.query.all()
+    return render_template("insurence.html" , insurance=insurance)
