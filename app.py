@@ -2,7 +2,8 @@ from flask import Flask
 from routes.routes import main_up
 from config import Config
 from extension  import db
-from models import User
+from models import User , Patient
+
 
 
 app = Flask(__name__)
