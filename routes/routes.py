@@ -41,6 +41,7 @@ def add_patient():
 
         db.session.add(patient)
         db.session.commit()
+        print("pathient saved")
 
         return redirect(url_for("main_up.dashboard"))
 
@@ -52,6 +53,8 @@ def home ():
  
 @main_up.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
+    patient = Patient.query.all()
+    print("patients")
+    return render_template("dashboard.html" , patient = patient)
 
 
