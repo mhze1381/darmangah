@@ -67,16 +67,17 @@ def delete_patient(id):
     db.session.delete(patient)
     db.session.commit()
     return redirect(url_for("main_up.dashboard"))
-@main_up.route("/edit-patient/ <int:id>" , methods=["GET" , "POST"])
+@main_up.route("/edit-patient/<int:id>" , methods=["GET" , "POST"])
 def edit_patient(id):
     patient = Patient.query.get_or_404(id)
     if request.method == "POST" :
         patient.full_name = request.form["full_name"]
-        patient.national_code = request.form[national_code]
-        patient.phone = request.form[phone]
-        patient.age = request.form[age]
-        patient.gender = request.form[gender]
-        patient.description = request.form[description]
+        patient.national_code = request.form["national_code"]
+        patient.phone = request.form["phone"]
+        patient.age = request.form["age"]
+        patient.gender = request.form["gender"]
+        patient.description = request.form["descriptio"]
         db.session.commit()
+        print("update")
         return redirect(url_for("main_up.dashboard"))
-    return render_template("edit_patient.html , patient=patient")
+    return render_template("edit_patient.html" , patient = patient)
