@@ -71,7 +71,7 @@ def dashboard():
         
         patients = Patient.query.all()
         print("patients")
-        return render_template("dashboard.html" , patients = patients)
+    return render_template("dashboard.html" , patients = patients)
     
 
 
