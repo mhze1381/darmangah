@@ -37,8 +37,8 @@ def add_patient():
             age=request.form["age"],
             gender=request.form["gender"],
             description=request.form["description"] ,
-            total_price = request.form["total_price"],
-            paid_price = request.form["paid_price"]
+            total_price = int(request.form["total_price"]),
+            paid_price = int(request.form["paid_price"])
         )
 
         db.session.add(patient)

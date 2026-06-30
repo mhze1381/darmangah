@@ -13,7 +13,7 @@ app.register_blueprint(main_up)
 with app.app_context():
     db.create_all()
 
-    if not User.query.filter_by(username="darmangeh").first():
+    if not User.query.filter_by(username="darmangah").first():
         user = User(
             username="darmangah",
             password="12345678"
