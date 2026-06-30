@@ -1,7 +1,7 @@
-from flask import Flask 
-from extension import db
+from flask import Flask
+from routes.routes import main_up
 from config import Config
-from routes import main_up
+from extension  import db
 from models import User
 
 
@@ -10,9 +10,14 @@ app.config.from_object(Config)
 db.init_app(app)
 app.register_blueprint(main_up)
 with app.app_context():
-        db.create_all()
-        if not User.query.filter_by(username ="admin").first():
-                user =  User( username = "darmangeh" , password = "12345678")
+    db.create_all()
+
+    if not User.query.filter_by(username="darmangeh").first():
+        user = User(
+            username="darmangeh",
+            password="12345678"
+        )
         db.session.add(user)
         db.session.commit()
-        app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)

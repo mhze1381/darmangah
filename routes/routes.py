@@ -5,10 +5,17 @@ from models import User
 
 main_up = Blueprint("main_up" , __name__)
 login_bp = Blueprint("login" , __name__)
-@main_up.route("/login" , methods = ["GET" , "POST "])
-#def login():
-   # if request.method == "POST" :
-       # return  render_template("login.html")
+@main_up.route("/login" , methods = ["GET" , "POST"])
+def login():
+    if request.method == "POST" :
+        username = request.form["username"]
+        password = request.form("password")
+
+        user = User.query.filter_by (uesrname=username , password=password).first()
+        if user:
+            return redirect(url_for("main_up.dashbord"))
+            return render_template("login.html")
+
           
 @main_up.route("/")
 def home ():
