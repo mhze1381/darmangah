@@ -36,7 +36,9 @@ def add_patient():
             phone=request.form["phone"],
             age=request.form["age"],
             gender=request.form["gender"],
-            description=request.form["description"]
+            description=request.form["description"] ,
+            total_price = request.form["total_price"],
+            paid_price = request.form["paid_price"]
         )
 
         db.session.add(patient)
@@ -76,7 +78,7 @@ def edit_patient(id):
         patient.phone = request.form["phone"]
         patient.age = request.form["age"]
         patient.gender = request.form["gender"]
-        patient.description = request.form["descriptio"]
+        patient.description = request.form["description"]
         db.session.commit()
         print("update")
         return redirect(url_for("main_up.dashboard"))

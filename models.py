@@ -14,4 +14,6 @@ class Patient(db.Model):
     gender = db.Column(db.String(10))
 
     description = db.Column(db.Text)
+    total_price = db.Column(db.Integer , default=0)
+    paid_price = db.Column(db.Integer , default=0)
 
