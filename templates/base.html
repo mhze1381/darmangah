@@ -1,1 +1,37 @@
+<!DOCTYPE html>
+<html lang="fa">
 
+<head>
+    <meta charset="UTF-8">
+    <title>ویرایش بیمار</title>
+</head>
+
+<body>
+
+<h2>ویرایش اطلاعات بیمار</h2>
+
+<form method="POST">
+
+    <input type="text" name="full_name" value="{{ patient.full_name }}" required><br><br>
+
+    <input type="text" name="national_code" value="{{ patient.national_code }}" required><br><br>
+
+    <input type="text" name="phone" value="{{ patient.phone }}"><br><br>
+
+    <input type="number" name="age" value="{{ patient.age }}"><br><br>
+
+    <input type="text" name="gender" value="{{ patient.gender }}"><br><br>
+
+    <textarea name="description">{{ patient.description }}</textarea><br><br>
+
+    <button type="submit">ذخیره تغییرات</button>
+
+</form>
+
+<br>
+
+<a href="/dashboard">بازگشت به داشبورد</a>
+
+</body>
+
+</html>
