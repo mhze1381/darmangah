@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="fa">
 
+<head>
+    <meta charset="UTF-8">
+    <title>بیمه‌ها</title>
+</head>
+
+<body>
+
+<h2>ثبت بیمه</h2>
+
+<form method="POST">
+
+    <input
+        type="text"
+        name="name"
+        placeholder="نام بیمه"
+        required>
+
+    <button type="submit">
+        ثبت
+    </button>
+
+</form>
+
+<hr>
+
+<h3>لیست بیمه‌ها</h3>
+
+<table border="1">
+
+<tr>
+    <th>شناسه</th>
+    <th>نام بیمه</th>
+</tr>
+
+{% for insurance in insurances %}
+
+<tr>
+    <td>{{ insurance.id }}</td>
+    <td>{{ insurance.name }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>
