@@ -23,7 +23,26 @@ def login():
             return redirect(url_for("main_up.dashboard"))
 
     return render_template("login.html")
+    from patient import Patient
 
+@main_up.route("/add-patient", methods=["GET", "POST"])
+def add_patient():
+    if request.method == "POST":
+        patient = Patient(
+            full_name=request.form["full_name"],
+            national_code=request.form["national_code"],
+            phone=request.form["phone"],
+            age=request.form["age"],
+            gender=request.form["gender"],
+            description=request.form["description"]
+        )
+
+        db.session.add(patient)
+        db.session.commit()
+
+        return redirect(url_for("main_up.dashboard"))
+
+    return render_template("add_patient.html")
           
 @main_up.route("/")
 def home ():
