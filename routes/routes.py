@@ -53,8 +53,14 @@ def home ():
  
 @main_up.route("/dashboard")
 def dashboard():
-    patient = Patient.query.all()
+    patients = Patient.query.all()
     print("patients")
-    return render_template("dashboard.html" , patient = patient)
-
+    return render_template("dashboard.html" , patients = patients)
+@main_up.route("/delete-patient/<int:id>")
+def delete_patient(id):
+    patient = Patient.query.get_or_404(id)
+    db.session.delete(patient)
+    db.session.commit()
+    return redirect(url_for("main_up.dashboard"))
+    
 
