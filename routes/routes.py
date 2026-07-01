@@ -34,7 +34,7 @@ def add_patient():
         tariff = Tariff.query.filter_by(
             insurance_id = int(request.form["insurance_id"]),
             procedure_id = int(request.form["procedure_id"]).first() 
-        if tariff is None 
+        if tariff is None : 
             return "برای این بیمه و خدمت ثبت نشده است"
         )
         patient = Patient(
@@ -77,7 +77,7 @@ def dashboard():
         ).all()
     else:
         
-        patient = Patient.query.all()
+        patients = Patient.query.all()
         print("patients")
     return render_template("dashboard.html" , patients = patients)
     
@@ -123,7 +123,7 @@ def procedure():
         )
         db.session.add(procedures)
         db.session.commit()
-        return  redirect(url_for(main_up.procedure))
+        return  redirect(url_for("main_up.procedure"))
     procedures = Procedure.query.all()
     return render_template( "procedure.html" , procedures = procedures)
 @main_up.route("/tariff", methods=["GET", "POST"])
