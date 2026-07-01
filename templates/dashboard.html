@@ -1,70 +1,122 @@
-
 <!DOCTYPE html>
 <html lang="fa">
 <head>
+
     <meta charset="UTF-8">
-    <title>داشبورد</title>
+    <title>داشبورد درمانگاه</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
 </head>
 <body>
 
-<h2>لیست بیماران</h2>
+<div class="container">
 
+    <aside class="sidebar">
 
-<a href="/add-patient">ثبت بیمار جدید</a><br><br>
-<a href="{{ url_for('main_up.insurance')}}"> بیمه ها</a><br><br>
-<a href="{{ url_for('main_up.procedure')}}">  ثبت خدمت</a><br><br>
-<a href="{{ url_for('main_up.tariff')}}">  ثبت تعرفه ها</a>
+        <div class="logo">
+            <h2>🏥 درمانگاه</h2>
+            <p>شهید محمد جعفر نصر اصفهانی</p>
+        </div>
 
-<form method="GET" action="/dashboard" ><input type="text" name="search" placeholder="نام و نشان  ، کد ملی یا شماره تلفن" >
-<button type="submit"> جستجو</button>
+        <a href="/dashboard">🏠 داشبورد</a>
+        <a href="/add-patient">👤 ثبت بیمار</a>
+        <a href="/insurance">🛡 بیمه ها</a>
+        <a href="/procedure">🩺 خدمات</a>
+        <a href="/tariff">💰 تعرفه ها</a>
 
-</form>
-<br><br>
+    </aside>
 
-<table border="1">
+    <main class="content">
 
-<tr>
-    <th>نام</th>
-    <th>کد ملی</th>
-    <th>تلفن</th>
-    <th>سن</th>
-    <th>جنسیت</th>
-    <th>هزینه کل</th>
-    <th>پرداختی</th>
-    <th>مانده</th>
-    <th></th>
-    <th></th>
+        <div class="header">
+            <h1>داشبورد درمانگاه</h1>
+            <p>نمای کلی سیستم</p>
+        </div>
 
+        <div class="cards">
 
-</tr>
+            <div class="card">
+                <h3>{{ patients|length }}</h3>
+                <span>تعداد بیماران</span>
+            </div>
 
-{% for patient in patients %}
+            <div class="card">
+                <h3>...</h3>
+                <span>هزینه ها</span>
+            </div>
 
-<tr>
+            <div class="card">
+                <h3>...</h3>
+                <span>پرداخت ها</span>
+            </div>
 
-<td>{{ patient.full_name }}</td>
-<td>{{ patient.national_code }}</td>
-<td>{{ patient.phone }}</td>
-<td>{{ patient.age }}</td>
-<td>{{ patient.gender }}</td>
-<td>{{ patient.total_price }}</td>
-<td>{{ patient.paid_price }}</td>
-<td>{{ patient.total_price - patient.paid_price }}</td>
-<td><a href="/delete-patient/{{ patient.id }}"> حذف</a></td>
-<td><a href="/edit-patient/{{ patient.id }}">ویرایش</a></td>
-<td><a href="/payment/{{ patient.id }}" class="btn btn-success"> پرداخت </a></td>
-<td>{{ patient.total_price - patient.paid_price }}</td>
+            <div class="card">
+                <h3>...</h3>
+                <span>بدهی</span>
+            </div>
 
+        </div>
 
+        <form method="GET" class="search">
 
+            <input type="text"
+                   name="search"
+                   placeholder="جستجو بر اساس نام، کد ملی یا تلفن">
 
-</tr>
+            <button>جستجو</button>
 
-{% endfor %}
+        </form>
 
-</table>
+        <table>
+
+            <tr>
+
+                <th>نام</th>
+                <th>کدملی</th>
+                <th>تلفن</th>
+                <th>سن</th>
+                <th>جنسیت</th>
+                <th>هزینه</th>
+                <th>پرداختی</th>
+                <th>مانده</th>
+                <th>عملیات</th>
+
+            </tr>
+
+            {% for patient in patients %}
+
+            <tr>
+
+                <td>{{patient.full_name}}</td>
+                <td>{{patient.national_code}}</td>
+                <td>{{patient.phone}}</td>
+                <td>{{patient.age}}</td>
+                <td>{{patient.gender}}</td>
+                <td>{{patient.total_price}}</td>
+                <td>{{patient.paid_price}}</td>
+                <td>{{patient.total_price-patient.paid_price}}</td>
+
+                <td>
+
+                    <a href="/edit-patient/{{patient.id}}">✏</a>
+
+                    <a href="/payment/{{patient.id}}">💳</a>
+
+                    <a href="/delete-patient/{{patient.id}}">🗑</a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </main>
+
+</div>
 
 </body>
 </html>
-
-
