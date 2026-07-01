@@ -37,13 +37,11 @@ def add_patient():
             phone=request.form["phone"],
             age=request.form["age"],
             gender=request.form["gender"],
-            insurance_id = request.form["insurance_id"],
-            procedure_id = request.form["procedure_id"]
             description=request.form["description"] ,
+            insurance_id = request.form["insurance_id"],
+            procedure_id = request.form["procedure_id"], 
             total_price = int(request.form["total_price"]),
             paid_price = int(request.form["paid_price"])
-            insurance_id = insurance_id , 
-            procedure_id = procedure_id
         )
 
         db.session.add(patient)
@@ -51,8 +49,9 @@ def add_patient():
         print("pathient saved")
 
         return redirect(url_for("main_up.dashboard"))
-
-    return render_template("add_patient.html")
+    insurances = Insurance.query.all()
+    procedures = Procedure.query.all()
+    return render_template("add_patient.html" , insurance= insurances , procedures = procedures  )
 
 
 

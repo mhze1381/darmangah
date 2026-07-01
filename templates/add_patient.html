@@ -19,6 +19,21 @@
     <input type="number" name="age" placeholder="سن"><br><br>
 
     <input type="text" name="gender" placeholder="جنسیت"><br><br>
+    <select name="insurance_id" required>
+        {% for insurance in insurances %}
+        <option value="{{insurance.id}}">
+            {{ insurance.name}}
+        </option>
+        {% endfor %}
+    </select>
+
+     <select name="procedure_id" required>
+        {% for procedure in procedures %}
+        <option value="{{rocedure.id}}">
+            {{ procedure.name}}
+        </option>
+        {% endfor %}
+    </select>
 
     <textarea name="description" placeholder="توضیحات"></textarea><br><br>
     <input type="number" name="total_price"  value="0" placeholder =  "هزینه" ><br><br>

@@ -35,5 +35,7 @@ class Patient(db.Model):
     procedure_id = db.Column (db.Integer , db.ForeignKey("procedure.id") , nullable=False )
     insurance = db.relationship("Insurance")
     procedure = db.relationship("Procedure")
+    insurance_id = insurance_id
+    procedure_id = procedure_id
   
 
