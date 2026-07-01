@@ -64,6 +64,7 @@ def home ():
 @main_up.route("/dashboard") 
 def dashboard():
     search = request.args.get("search")
+    print ("search" , search)
     if search :
         patients = Patient.query.filter(or_(
         Patient.full_name.contains(search) ,
