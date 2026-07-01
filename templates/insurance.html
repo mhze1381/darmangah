@@ -1,50 +1,53 @@
 <!DOCTYPE html>
 <html lang="fa">
-
 <head>
     <meta charset="UTF-8">
-    <title>بیمه‌ها</title>
+    <title>مدیریت بیمه‌ها</title>
 </head>
-
 <body>
 
-<h2>ثبت بیمه</h2>
+    <h2>ثبت بیمه جدید</h2>
 
-<form method="POST">
+    <form method="POST">
+        <input
+            type="text"
+            name="name"
+            placeholder="نام بیمه"
+            required
+        >
+        <button type="submit">ثبت بیمه</button>
+    </form>
 
-    <input
-        type="text"
-        name="name"
-        placeholder="نام بیمه"
-        required>
+    <hr>
 
-    <button type="submit">
-        ثبت
-    </button>
+    <h2>لیست بیمه‌ها</h2>
 
-</form>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>ردیف</th>
+            <th>نام بیمه</th>
+            <th>عملیات</th>
+        </tr>
 
-<hr>
+        {% for insurance in insurances %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ insurance.name }}</td>
+            <td>
+                <a href="{{ url_for('main_up.edit_insurance', id=insurance.id) }}">
+                    ویرایش
+                </a>
 
-<h3>لیست بیمه‌ها</h3>
+                |
 
-<table border="1">
-
-<tr>
-    <th>شناسه</th>
-    <th>نام بیمه</th>
-</tr>
-
-{% for insurance in insurances %}
-
-<tr>
-    <td>{{ insurance.id }}</td>
-    <td>{{ insurance.name }}</td>
-</tr>
-
-{% endfor %}
-
-</table>
+                <a href="{{ url_for('main_up.delete_insurance', id=insurance.id) }}"
+                   onclick="return confirm('از حذف این بیمه مطمئن هستید؟')">
+                    حذف
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 
 </body>
 </html>

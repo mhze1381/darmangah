@@ -49,6 +49,9 @@
 <td>{{ patient.total_price - patient.paid_price }}</td>
 <td><a href="/delete-patient/{{ patient.id }}"> حذف</a></td>
 <td><a href="/edit-patient/{{ patient.id }}">ویرایش</a></td>
+<td><a href="/payment/{{ patient.id }}" class="btn btn-success"> پرداخت </a></td>
+<td>{{ patient.total_price - patient.paid_price }}</td>
+
 
 
 

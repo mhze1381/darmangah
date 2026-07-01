@@ -27,44 +27,40 @@ def login():
     return render_template("login.html")
 
 
-
+# روت اضافه کردن بیمار
 @main_up.route("/add-patient", methods=["GET", "POST"])
 def add_patient():
     if request.method == "POST":
         tariff = Tariff.query.filter_by(
             insurance_id = int(request.form["insurance_id"]),
-            procedure_id = int(request.form["procedure_id"]).first() 
+            procedure_id = int(request.form["procedure_id"]).first()) 
         if tariff is None : 
             return "برای این بیمه و خدمت ثبت نشده است"
-        )
         patient = Patient(
-            full_name=request.form["full_name"],
-            national_code=request.form["national_code"],
-            phone=request.form["phone"],
-            age=request.form["age"],
-            gender=request.form["gender"],
-            description=request.form["description"] ,
-            insurance_id = request.form["insurance_id"],
-            procedure_id = request.form["procedure_id"],
-            total_price = tariff.price , paid_price = 0
-        )
-
+        full_name=request.form["full_name"],
+        national_code=request.form["national_code"],
+        phone=request.form["phone"],
+        age=request.form["age"],
+        gender=request.form["gender"],
+        description=request.form["description"] ,
+        insurance_id = request.form["insurance_id"],
+        procedure_id = request.form["procedure_id"],
+        total_price = tariff.price , paid_price = 0)
         db.session.add(patient)
         db.session.commit()
         print("pathient saved")
-
         return redirect(url_for("main_up.dashboard"))
     insurances = Insurance.query.all()
     procedures = Procedure.query.all()
     return render_template("add_patient.html" , insurances= insurances , procedures = procedures  )
 
 
-
+# روت لاگین
 @main_up.route("/")
 def home ():
     return render_template("login.html")
 
- 
+ # روت داشبورد
 @main_up.route("/dashboard") 
 def dashboard():
     search = request.args.get("search")
@@ -76,13 +72,12 @@ def dashboard():
         )
         ).all()
     else:
-        
         patients = Patient.query.all()
         print("patients")
     return render_template("dashboard.html" , patients = patients)
     
 
-
+# روت حذف بیمار
 @main_up.route("/delete-patient/<int:id>")
 def delete_patient(id):
     patient = Patient.query.get_or_404(id)
@@ -90,6 +85,7 @@ def delete_patient(id):
     db.session.commit()
     return redirect(url_for("main_up.dashboard"))
 
+#روت ادیت اطلاعات بیمار
 @main_up.route("/edit-patient/<int:id>" , methods=["GET" , "POST"])
 def edit_patient(id):
     patient = Patient.query.get_or_404(id)
@@ -105,16 +101,23 @@ def edit_patient(id):
         return redirect(url_for("main_up.dashboard"))
     return render_template("edit_patient.html" , patient = patient)
 
+# روت بیمه
 @main_up.route("/insurance" , methods=["GET" , "POST"])
 def insurance():
     if request.method == "POST":
+        exists = Insurance.query.filter_by(
+            name = request.form["name"].first())
+        if exists :
+            return "این بیمه قبلا ثبت شده است"
         insurance = Insurance ( name = request.form["name"])
         db.session.add(insurance)
         db.session.commit()
         return redirect(url_for("main_up.insurance"))
-    insurances = Insurance.query.all()
-    return render_template("insurence.html" , insurances=insurances)
+    insurances = Insurance.query.order_by(Insurance.name).all()
+    count = Insurance.query.count()
+    return render_template("insurance.html" , insurances=insurances , count = count)
 
+# روت پروسیجر
 @main_up.route("/procedure" , methods = ["GET" , "POST"])
 def procedure():
     if request.method == "POST" :
@@ -126,6 +129,8 @@ def procedure():
         return  redirect(url_for("main_up.procedure"))
     procedures = Procedure.query.all()
     return render_template( "procedure.html" , procedures = procedures)
+
+# روت تعرفه
 @main_up.route("/tariff", methods=["GET", "POST"])
 def tariff():
     insurances = Insurance.query.all()
@@ -135,13 +140,10 @@ def tariff():
         tariff = Tariff(
             insurance_id=int(request.form["insurance_id"]),
             procedure_id=int(request.form["procedure_id"]),
-            price=int(request.form["price"])
-        )
-
+            price=int(request.form["price"]))
         db.session.add(tariff)
         db.session.commit()
         return redirect(url_for("main_up.tariff"))
-
     tariffs = Tariff.query.all()
 
     return render_template(
@@ -150,3 +152,35 @@ def tariff():
         procedures=procedures,
         tariffs=tariffs
     )
+
+# روت تسویه
+@main_up.route("/payment/<int:id>" , methods = ["GET" , "POST"])
+def payment(id):
+    patient = Patient.query.get_or_404(id)
+    if request.method == "POST" :
+        amount = int(request.form["amount"])
+        patient.paid_price += amount
+        db.session.add(amount)
+        db.session.commit()
+        return  redirect(url_for("main_up.amount"))
+    return render_template("payment.html" , patient = patient)
+
+# روت حذف بیمه بیمار
+@main_up.route("/delete-insurance/ , <int:id> ")
+def delete_insurance(id):
+    insurance = Insurance.query.get_or_404(id) ,
+    db.session.commit()
+    return redirect(url_for("main_up.insurace"))
+# روت ویرایش بیمار
+
+@main_up.route("/edit-insurance/<int:id>", methods=["GET", "POST"])
+def edit_insurance(id):
+    insurance = Insurance.query.get_or_404(id)
+
+    if request.method == "POST":
+        insurance.name = request.form["name"]
+        db.session.add()
+        db.session.commit()
+        return redirect(url_for("main_up.insurance"))
+
+    return render_template("edit_insurance.html", insurance=insurance)
