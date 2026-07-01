@@ -45,9 +45,7 @@ def add_patient():
             gender=request.form["gender"],
             description=request.form["description"] ,
             insurance_id = request.form["insurance_id"],
-            procedure_id = request.form["procedure_id"], 
-            total_price = int(request.form["total_price"]),
-            paid_price = int(request.form["paid_price"]),
+            procedure_id = request.form["procedure_id"],
             total_price = tariff.price , paid_price = 0
         )
 
@@ -58,7 +56,7 @@ def add_patient():
         return redirect(url_for("main_up.dashboard"))
     insurances = Insurance.query.all()
     procedures = Procedure.query.all()
-    return render_template("add_patient.html" , insurance= insurances , procedures = procedures  )
+    return render_template("add_patient.html" , insurances= insurances , procedures = procedures  )
 
 
 
@@ -79,7 +77,7 @@ def dashboard():
         ).all()
     else:
         
-        patients = Patient.query.all()
+        patient = Patient.query.all()
         print("patients")
     return render_template("dashboard.html" , patients = patients)
     
@@ -123,9 +121,10 @@ def procedure():
         procedures = Procedure(
             name=request.form["name"]
         )
-        db.session.add(procedure)
+        db.session.add(procedures)
         db.session.commit()
         return  redirect(url_for(main_up.procedure))
+    procedures = Procedure.query.all()
     return render_template( "procedure.html" , procedures = procedures)
 @main_up.route("/tariff", methods=["GET", "POST"])
 def tariff():
