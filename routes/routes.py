@@ -33,7 +33,7 @@ def add_patient():
     if request.method == "POST":
         tariff = Tariff.query.filter_by(
             insurance_id = int(request.form["insurance_id"]),
-            procedure_id = int(request.form["procedure_id"]).first()) 
+            procedure_id = int(request.form["procedure_id"])).first()
         if tariff is None : 
             return "برای این بیمه و خدمت ثبت نشده است"
         patient = Patient(
@@ -106,7 +106,7 @@ def edit_patient(id):
 def insurance():
     if request.method == "POST":
         exists = Insurance.query.filter_by(
-            name = request.form["name"].first())
+            name = request.form["name"]).first()
         if exists :
             return "این بیمه قبلا ثبت شده است"
         insurance = Insurance ( name = request.form["name"])
@@ -160,15 +160,14 @@ def payment(id):
     if request.method == "POST" :
         amount = int(request.form["amount"])
         patient.paid_price += amount
-        db.session.add(amount)
         db.session.commit()
-        return  redirect(url_for("main_up.amount"))
-    return render_template("payment.html" , patient = patient)
+        return render_template("payment.html" , patient = patient)
 
 # روت حذف بیمه بیمار
-@main_up.route("/delete-insurance/ , <int:id> ")
+@main_up.route("/delete-insurance/ <int:id> ")
 def delete_insurance(id):
-    insurance = Insurance.query.get_or_404(id) ,
+    insurance = Insurance.query.get_or_404(id) 
+    db.session.delete(insurance)
     db.session.commit()
     return redirect(url_for("main_up.insurace"))
 # روت ویرایش بیمار
@@ -179,7 +178,6 @@ def edit_insurance(id):
 
     if request.method == "POST":
         insurance.name = request.form["name"]
-        db.session.add()
         db.session.commit()
         return redirect(url_for("main_up.insurance"))
 
