@@ -2,7 +2,7 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <title>تعرفه‌ها</title>
+    <title>خدمات </title>
 </head>
 <body>
 
@@ -15,11 +15,25 @@
     <input type="text" name="name" placeholder="سرم تراپی ">
     <button type="submit">ثبت</button>
 </form>
+{% for procedure in procedures %}
+<tr>
+    <td>{{ procedure.name }}</td>
 
+    <td>
+                <a href="{{ url_for('main_up.edit_procedure', id=procedure.id) }}">
+                    ویرایش
+                </a>
+            </td>
+            <td>
+                <a href="{{ url_for('main_up.delete_procedure', id=procedure.id) }}"
+                   onclick="return confirm('از حذف این خدمت مطمئن هستید؟')">
+                    حذف
+                </a>
+            </td>
+</tr>
 <hr>
 
-{% for procedure in procedures %}
-    <p>{{ procedure.name }}</p>
+
 {% endfor %}
 
 </body>

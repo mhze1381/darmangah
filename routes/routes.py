@@ -121,14 +121,38 @@ def insurance():
 @main_up.route("/procedure" , methods = ["GET" , "POST"])
 def procedure():
     if request.method == "POST" :
+        exists=  Procedure.query.filter_by(
+            name = request.form["name"]).first()
+        if exists :
+            return "این خدمت قبلا ثبت شده است"
         procedures = Procedure(
-            name=request.form["name"]
-        )
+            name=request.form["name"])
         db.session.add(procedures)
         db.session.commit()
         return  redirect(url_for("main_up.procedure"))
-    procedures = Procedure.query.all()
-    return render_template( "procedure.html" , procedures = procedures)
+    procedures = Procedure.query.order_by(Procedure.name).all()
+    count = Procedure.query.count()
+    return render_template( "procedure.html" , procedures = procedures , count = count)
+
+#حذف خدمت
+@main_up.route("/delete-procedure/<int:id>")
+def  delete_procedure(id):
+    procedure = Procedure.query.get_or_404(id) 
+    db.session.delete(procedure)
+    db.session.commit()
+    return redirect(url_for("main_up.procedure"))
+
+#ویرایش خدمت
+@main_up.route("/edit-procedure/<int:id>", methods=["GET", "POST"])
+def edit_procedure(id):
+    procedure = Procedure.query.get_or_404(id)
+    if request.method == "POST":
+        procedure.name = request.form["name"]
+        db.session.commit()
+        return redirect(url_for("main_up.procedure"))
+
+    return render_template("edit_procedure.html", procedure=procedure)
+
 
 # روت تعرفه
 @main_up.route("/tariff", methods=["GET", "POST"])
@@ -137,10 +161,10 @@ def tariff():
     procedures = Procedure.query.all()
 
     if request.method == "POST":
-        tariff = Tariff(
+        tariff = Tariff.query.filter_by(
             insurance_id=int(request.form["insurance_id"]),
             procedure_id=int(request.form["procedure_id"]),
-            price=int(request.form["price"]))
+            price=int(request.form["price"])).first()
         db.session.add(tariff)
         db.session.commit()
         return redirect(url_for("main_up.tariff"))
@@ -170,7 +194,7 @@ def delete_insurance(id):
     db.session.delete(insurance)
     db.session.commit()
     return redirect(url_for("main_up.insurace"))
-# روت ویرایش بیمار
+# روت ویرایش بیمه بیمار
 
 @main_up.route("/edit-insurance/<int:id>", methods=["GET", "POST"])
 def edit_insurance(id):
