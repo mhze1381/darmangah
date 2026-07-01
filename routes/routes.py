@@ -47,7 +47,8 @@ def add_patient():
             insurance_id = request.form["insurance_id"],
             procedure_id = request.form["procedure_id"], 
             total_price = int(request.form["total_price"]),
-            paid_price = int(request.form["paid_price"])
+            paid_price = int(request.form["paid_price"]),
+            total_price = tariff.price , paid_price = 0
         )
 
         db.session.add(patient)
