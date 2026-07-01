@@ -9,7 +9,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Tahoma;
+font-family:"vazirmatn"  sans-serif;
 }
 
 body{
@@ -50,7 +50,30 @@ flex-direction:column;
 gap:12px;
 
 }
+ .sidebar footer{
+    margin-top: 20px;
+    background: rgba(233, 223, 223, 0.08);
+    padding: 30px;
+    border-radius: 18px;
+    color: white;
+    text-align: center;
+    backdrop-filter: blur(8px);
 
+ }
+
+ .date-box{
+    margin-bottom: 15px;
+    margin-top: 30px;
+    color: #ddd;
+    font-size: 15px;
+ }
+ .time-box{
+   margin-top: 20px;
+    font-size: 28px;
+    color: #ddd;
+    font-weight: bold;
+    letter-spacing: 2px;
+ }
 .logo{
 
 text-align:center;
@@ -199,7 +222,7 @@ color:white;
 
 th{
 
-background:#2467db;
+background:#104196;
 
 padding:18px;
 
