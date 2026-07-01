@@ -29,16 +29,14 @@
 
      <select name="procedure_id" required>
         {% for procedure in procedures %}
-        <option value="{{rocedure.id}}">
+        <option value="{{procedure.id}}">
             {{ procedure.name}}
         </option>
         {% endfor %}
     </select>
 
     <textarea name="description" placeholder="توضیحات"></textarea><br><br>
-    <input type="number" name="total_price"  value="0" placeholder =  "هزینه" ><br><br>
-    <input type="number" name="paid_price" value="0"  placeholder = "مبلغ پرداختی"><br><br>
-    <button type="submit">ثبت بیمار</button>
+    <button type="submit"> ثبت بیمار</button>
 
 </form>
 

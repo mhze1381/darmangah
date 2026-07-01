@@ -1,7 +1,7 @@
 from flask import Blueprint  , render_template
 from flask_login import LoginManager
 from flask import Blueprint , render_template , request , redirect , url_for 
-from models import User , Patient , Insurance , Procedure
+from models import User , Patient , Insurance , Procedure  , Tariff
 from extension import db
 from sqlalchemy import or_
 
@@ -31,6 +31,12 @@ def login():
 @main_up.route("/add-patient", methods=["GET", "POST"])
 def add_patient():
     if request.method == "POST":
+        tariff = Tariff.query.filter_by(
+            insurance_id = int(request.form["insurance_id"]),
+            procedure_id = int(request.form["procedure_id"]).first() 
+        if tariff is None 
+            return "برای این بیمه و خدمت ثبت نشده است"
+        )
         patient = Patient(
             full_name=request.form["full_name"],
             national_code=request.form["national_code"],
@@ -84,6 +90,7 @@ def delete_patient(id):
     db.session.delete(patient)
     db.session.commit()
     return redirect(url_for("main_up.dashboard"))
+
 @main_up.route("/edit-patient/<int:id>" , methods=["GET" , "POST"])
 def edit_patient(id):
     patient = Patient.query.get_or_404(id)
@@ -106,5 +113,40 @@ def insurance():
         db.session.add(insurance)
         db.session.commit()
         return redirect(url_for("main_up.insurance"))
-    insurance = Insurance.query.all()
-    return render_template("insurence.html" , insurance=insurance)
+    insurances = Insurance.query.all()
+    return render_template("insurence.html" , insurances=insurances)
+
+@main_up.route("/procedure" , methods = ["GET" , "POST"])
+def procedure():
+    if request.method == "POST" :
+        procedures = Procedure(
+            name=request.form["name"]
+        )
+        db.session.add(procedure)
+        db.session.commit()
+        return  redirect(url_for(main_up.procedure))
+    return render_template( "procedure.html" , procedures = procedures)
+@main_up.route("/tariff", methods=["GET", "POST"])
+def tariff():
+    insurances = Insurance.query.all()
+    procedures = Procedure.query.all()
+
+    if request.method == "POST":
+        tariff = Tariff(
+            insurance_id=int(request.form["insurance_id"]),
+            procedure_id=int(request.form["procedure_id"]),
+            price=int(request.form["price"])
+        )
+
+        db.session.add(tariff)
+        db.session.commit()
+        return redirect(url_for("main_up.tariff"))
+
+    tariffs = Tariff.query.all()
+
+    return render_template(
+        "tariff.html",
+        insurances=insurances,
+        procedures=procedures,
+        tariffs=tariffs
+    )

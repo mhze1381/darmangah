@@ -12,11 +12,12 @@ class Procedure (db.Model):
     name = db.Column(db.String(100) , unique=True , nullable=False)
 
 class Tariff(db.Model):
-       id = db.Column(db.Integer , primary_key=True)
-       insurance_id = db.Column (db.Integer , db.ForeignKey("insurance.id") , nullable=False)
-       procedure_id = db.Column (db.Integer , db.ForeignKey("procedure.id") , nullable=False )
-       price = db.Column(db.Integer , nullable=False)
-
+    id = db.Column(db.Integer , primary_key=True)
+    insurance_id = db.Column (db.Integer , db.ForeignKey("insurance.id") , nullable=False)
+    procedure_id = db.Column (db.Integer , db.ForeignKey("procedure.id") , nullable=False )
+    price = db.Column(db.Integer , nullable=False)
+    insurance = db.relationship("Insurance")
+    procedure = db.relationship("Procedure")
 
 
 class Patient(db.Model):
