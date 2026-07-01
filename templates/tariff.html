@@ -54,3 +54,11 @@
 
     {% for tariff in tariffs %}
     <tr>
+<td>{{ tariff.insurance.name }}</td>
+<td>{{ tariff.procedure.name }}</td>
+<td>{{ tariff.price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

@@ -161,10 +161,10 @@ def tariff():
     procedures = Procedure.query.all()
 
     if request.method == "POST":
-        tariff = Tariff.query.filter_by(
+        tariff = Tariff(
             insurance_id=int(request.form["insurance_id"]),
             procedure_id=int(request.form["procedure_id"]),
-            price=int(request.form["price"])).first()
+            price=int(request.form["price"]))
         db.session.add(tariff)
         db.session.commit()
         return redirect(url_for("main_up.tariff"))
@@ -188,12 +188,12 @@ def payment(id):
         return render_template("payment.html" , patient = patient)
 
 # روت حذف بیمه بیمار
-@main_up.route("/delete-insurance/ <int:id> ")
+@main_up.route("/delete-insurance/<int:id> ")
 def delete_insurance(id):
     insurance = Insurance.query.get_or_404(id) 
     db.session.delete(insurance)
     db.session.commit()
-    return redirect(url_for("main_up.insurace"))
+    return redirect(url_for("main_up.insurance"))
 # روت ویرایش بیمه بیمار
 
 @main_up.route("/edit-insurance/<int:id>", methods=["GET", "POST"])
