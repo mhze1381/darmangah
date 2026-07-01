@@ -1,1 +1,23 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>تعرفه‌ها</title>
+</head>
+<body>
 
+<h2>ثبت خدمت</h2>
+
+<form method="POST">
+    <input type="text" name="name" placeholder="نام خدمت">
+    <button type="submit">ثبت</button>
+</form>
+
+<hr>
+
+{% for procedure in procedures %}
+    <p>{{ procedure.name }}</p>
+{% endfor %}
+
+</body>
+</html>
