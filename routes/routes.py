@@ -178,6 +178,31 @@ def tariff():
         tariffs=tariffs
     )
 
+# روت حذف تعرفه 
+@main_up.route("/delete-tariff/<int:id>")
+def delete_tariff(id):
+    tariff = Tariff.query.get_or_404(id) 
+    db.session.delete(tariff)
+    db.session.commit()
+    return redirect(url_for("main_up.tariff"))
+
+# روت ویرایش تعرفه
+@main_up.route("/edit-tariff/<int:id>", methods=["GET", "POST"])
+def edit_tariff(id):
+    tariff = Tariff.query.get_or_404(id)
+    insurance = Insurance.query.all()
+    procedure = Procedure.query.all()
+    if request.method == "POST":
+        tariff.insurance_id = int(request.form["insurance_id"])
+        tariff.procedure_id = int(request.form["procedure_id"])
+        tariff.price = int(request.form["price"])
+        db.session.commit()
+        return redirect(url_for("main_up.tariff"))
+
+    return render_template("edit_tariff.html", procedure= procedure , insurance=insurance , tariff=tariff)
+
+
+
 # روت تسویه
 @main_up.route("/payment/<int:id>" , methods = ["GET" , "POST"])
 def payment(id):
@@ -186,10 +211,10 @@ def payment(id):
         amount = int(request.form["amount"])
         patient.paid_price += amount
         db.session.commit()
-        return render_template("payment.html" , patient = patient)
+    return render_template("payment.html" , patient = patient)
 
 # روت حذف بیمه بیمار
-@main_up.route("/delete-insurance/<int:id> ")
+@main_up.route("/delete-insurance/<int:id>")
 def delete_insurance(id):
     insurance = Insurance.query.get_or_404(id) 
     db.session.delete(insurance)

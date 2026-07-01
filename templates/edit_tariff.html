@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>ویرایش تعرفه</title>
+</head>
+<body>
+
+<h2>ویرایش تعرفه</h2>
+
+<form method="POST">
+
+    <label>بیمه:</label>
+    <select name="insurance_id">
+
+        {% for insurance in insurances %}
+            <option value="{{ insurance.id }}"
+                {% if insurance.id == tariff.insurance_id %}
+                    selected
+                {% endif %}>
+                {{ insurance.name }}
+            </option>
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <label>خدمت:</label>
+    <select name="procedure_id">
+
+        {% for procedure in procedures %}
+            <option value="{{ procedure.id }}"
+                {% if procedure.id == tariff.procedure_id %}
+                    selected
+                {% endif %}>
+                {{ procedure.name }}
+            </option>
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <label>قیمت:</label>
+    <input
+        type="number"
+        name="price"
+        value="{{ tariff.price }}"
+        required>
+
+    <br><br>
+
+    <button type="submit">
+        ذخیره تغییرات
+    </button>
+
+</form>
+
+<br>
+
+<a href="{{ url_for('main_up.tariff') }}">
+    بازگشت به تعرفه‌ها
+</a>
+
+</body>
+</html>

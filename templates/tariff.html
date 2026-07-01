@@ -50,6 +50,7 @@
         <th>بیمه</th>
         <th>خدمت</th>
         <th>قیمت</th>
+        <th> عملیات</th>
     </tr>
 
     {% for tariff in tariffs %}
@@ -57,6 +58,18 @@
 <td>{{ tariff.insurance.name }}</td>
 <td>{{ tariff.procedure.name }}</td>
 <td>{{ tariff.price }}</td>
+
+<td>
+    <a href="{{ url_for('main_up.edit_tariff', id=tariff.id) }}">
+        ویرایش
+    </a>
+</td>
+<td>
+    <a href="{{ url_for('main_up.delete_tariff', id=tariff.id) }}">
+        حذف
+    </a>
+</td>
+
     </tr>
     {% endfor %}
 </table>

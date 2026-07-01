@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fa">
 <head>
@@ -6,27 +7,31 @@
 </head>
 <body>
 
-    <h2>ویرایش خدمت</h2>
+<h2>ویرایش خدمت</h2>
 
-    <form method="POST">
+<form method="POST">
 
-        <label>نام خدمت</label>
-        <input
-            type="text"
-            name="name"
-            value="{{ insurance.name }}"
-            required
-        >
+    <input
+        type="text"
+        name="name"
+        value="{{ procedure.name }}"
+        required
+    >
 
-        <button type="submit">ذخیره تغییرات</button>
+    <br><br>
 
-    </form>
+    <button type="submit">
+        ذخیره تغییرات
+    </button>
 
-    <br>
+</form>
 
-    <a href="{{ url_for('main_up.insurance') }}">
-        بازگشت
-    </a>
+<br>
+
+<a href="{{ url_for('main_up.procedure') }}">
+    بازگشت به خدمات
+</a>
 
 </body>
 </html>
+
