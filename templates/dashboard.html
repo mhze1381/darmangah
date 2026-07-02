@@ -25,6 +25,7 @@
         <a href="/insurance">🛡 بیمه ها</a>
         <a href="/procedure">🩺 خدمات</a>
         <a href="/tariff">💰 تعرفه ها</a>
+        <a href="{{url_for('main_up.backup')}}">بکاپ</a>
         <div class="sidebar-footer">
             <div class="date-box">
                 <span id="date">
@@ -52,23 +53,32 @@
         <div class="cards">
 
             <div class="card">
-                <h3>{{ patients|length }}</h3>
+                <h3>{{ patient_count }}</h3>
                 <span>تعداد بیماران</span>
             </div>
 
             <div class="card">
-                <h3>...</h3>
-                <span>هزینه ها</span>
+                <h3>{{ insurance_count}}</h3>
+                <span> تعداد بیمه ها </span>
             </div>
 
             <div class="card">
-                <h3>...</h3>
-                <span>پرداخت ها</span>
+                <h3>{{procedure_count}}</h3>
+                <span> تعداد خدمات </span>
             </div>
 
             <div class="card">
-                <h3>...</h3>
-                <span>بدهی</span>
+                <h3>{{ total_income }}</h3>
+                <span>درآمد دریافتی</span>
+
+            <div class="card">
+                <h3>{{ received }}</h3>
+                <span>دریافتی</span>
+            
+            <div class="card">
+                <h3>{{ remaining }}</h3>
+                <span>باقیمانده</span>
+         
             </div>
 
         </div>

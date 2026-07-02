@@ -4,7 +4,10 @@ from flask import Blueprint , render_template , request , redirect , url_for
 from models import User , Patient , Insurance , Procedure  , Tariff
 from extension import db
 from sqlalchemy import or_
-from werkzeug.security import generate_password_hash , check_password_hash
+from werkzeug.security import check_password_hash
+import os
+import shutil
+from datetime import datetime
 
 main_up = Blueprint("main_up" , __name__)
 login_bp = Blueprint("login" , __name__)
@@ -32,6 +35,12 @@ def login():
 def home():
     return render_template("login.html")
 
+# روت لاگین
+@main_up.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("main_up"))
 # روت اضافه کردن بیمار
 @main_up.route("/add-patient", methods=["GET", "POST"])
 @login_required
@@ -75,8 +84,14 @@ def dashboard():
         ).all()
     else:
         patients = Patient.query.all()
-        print("patients")
-    return render_template("dashboard.html" , patients = patients)
+        patient_count= Patient.query.count()
+        insurance_count = Patient.query.count()
+        procedure_count = Patient.query.count()
+        total_income = db.session.query(db.func.sum(Patient.total_price)).scalar() or 0
+        received = db.session.query(db.func.sum(Patient.total_price)).scalar() or 0
+        remaining = total_income - received
+    return render_template("dashboard.html" , patients = patients , patient_count=patient_count ,insurance_count=insurance_count ,
+         procedure_count=procedure_count , total_income=total_income ,received=received , remaining =remaining)
     
 
 # روت حذف بیمار
@@ -225,8 +240,8 @@ def payment(id):
     return render_template("payment.html" , patient = patient)
 
 # روت حذف بیمه بیمار
-@login_required
 @main_up.route("/delete-insurance/<int:id>")
+@login_required
 def delete_insurance(id):
     insurance = Insurance.query.get_or_404(id) 
     db.session.delete(insurance)
@@ -234,8 +249,8 @@ def delete_insurance(id):
     return redirect(url_for("main_up.insurance"))
 
 # روت ویرایش بیمه بیمار
-@login_required
 @main_up.route("/edit-insurance/<int:id>", methods=["GET", "POST"])
+@login_required
 def edit_insurance(id):
     insurance = Insurance.query.get_or_404(id)
 
@@ -245,3 +260,14 @@ def edit_insurance(id):
         return redirect(url_for("main_up.insurance"))
 
     return render_template("edit_insurance.html", insurance=insurance)
+@main_up.route("/backup")
+@login_required
+def backup():
+    source = os.path.join("instance" , "clinic,db")
+    backup_folder = "backup"
+    if not os.path.exists(backup_folder):
+        os.makedirs(backup_folder)
+        filename = datatime.now().strftime("%y-%m-%d-%H-%M-%S.db")
+        destination = os.path.join(backup_folder , filename)
+        shutil.copy(source , destination)
+        return "بکاپ با موفقیت گرفته شد"

@@ -2,8 +2,8 @@ from flask import Flask
 from routes.routes import main_up
 from config import Config
 from extension  import db , login_manager
-from models import User , Patient
-from werkzeug.security import generate_password_hash , check_password_hash
+from models import User 
+from werkzeug.security import generate_password_hash 
 
 app = Flask(__name__)
 app.config.from_object(Config)
