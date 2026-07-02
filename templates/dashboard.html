@@ -51,46 +51,37 @@
         </div>
 
         <div class="cards">
-
             <div class="card">
                 <h3>{{ patient_count }}</h3>
                 <span>تعداد بیماران</span>
             </div>
-
             <div class="card">
                 <h3>{{ insurance_count}}</h3>
                 <span> تعداد بیمه ها </span>
             </div>
-
             <div class="card">
                 <h3>{{procedure_count}}</h3>
                 <span> تعداد خدمات </span>
             </div>
-
             <div class="card">
                 <h3>{{ total_income }}</h3>
                 <span>درآمد دریافتی</span>
-
             <div class="card">
                 <h3>{{ received }}</h3>
                 <span>دریافتی</span>
-            
+            </div>
             <div class="card">
                 <h3>{{ remaining }}</h3>
                 <span>باقیمانده</span>
-         
             </div>
-
         </div>
 
         <form method="GET" class="search">
-
             <input type="text"
                    name="search"
                    placeholder="جستجو بر اساس نام، کد ملی یا تلفن">
 
             <button>جستجو</button>
-
         </form>
 
         <table>
@@ -144,5 +135,6 @@
 <div>
 
 <script src="{{ url_for('static' , filename='js/dashboard.js')}}"></script>
+</div>
 </body>
 </html>
