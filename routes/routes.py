@@ -43,83 +43,89 @@ def home():
 def logout():
     logout_user()
     return redirect(url_for("main_up"))
-# روت اضافه کردن بیمار
+
+#روت اضافه کردن بیمار
 @main_up.route("/add-patient", methods=["GET", "POST"])
 @login_required
 def add_patient():
+
     if request.method == "POST":
+
         national_code = request.form["national_code"].strip()
 
-    if not national_code.isdigit() or len(national_code) != 10:
-        flash("کد ملی باید دقیقاً ۱۰ رقم باشد.")
-        return redirect(url_for("main_up.add_patient"))
-    procedure_ids = request.form.getlist("procedure_ids")
+        if not national_code.isdigit() or len(national_code) != 10:
+            flash("کد ملی باید دقیقاً ۱۰ رقم باشد.", "danger")
+            return redirect(url_for("main_up.add_patient"))
 
-    exists = Patient.query.filter_by(
-        national_code=national_code
-    ).first()
+        exists = Patient.query.filter_by(
+            national_code=national_code
+        ).first()
 
-    if exists:
-        flash("بیماری قبلاً با این کد ملی ثبت شده است")
-        return redirect(url_for("main_up.add_patient"))
+        if exists:
+            flash("بیماری قبلاً با این کد ملی ثبت شده است.", "danger")
+            return redirect(url_for("main_up.add_patient"))
 
-    patient = Patient(
-        full_name=request.form["full_name"],
-        national_code=national_code,
-        phone=request.form["phone"],
-        age=request.form["age"],
-        gender=request.form["gender"],
-        description=request.form["description"],
-        insurance_id=int(request.form["insurance_id"]),
-        total_price=0,
-        paid_price=0
+        procedure_ids = request.form.getlist("procedure_ids")
+
+        patient = Patient(
+            full_name=request.form["full_name"],
+            national_code=national_code,
+            phone=request.form["phone"],
+            age=int(request.form["age"]) if request.form["age"] else None,
+            gender=request.form["gender"],
+            description=request.form["description"],
+            insurance_id=int(request.form["insurance_id"]),
+            total_price=0,
+            paid_price=0
+        )
+
+        try:
+
+            db.session.add(patient)
+            db.session.flush()
+
+            total_price = 0
+
+            for procedure_id in procedure_ids:
+
+                tariff = Tariff.query.filter_by(
+                    insurance_id=patient.insurance_id,
+                    procedure_id=int(procedure_id)
+                ).first()
+
+                if tariff is None:
+                    db.session.rollback()
+                    flash("برای یکی از خدمات انتخاب شده تعرفه ثبت نشده است.", "danger")
+                    return redirect(url_for("main_up.add_patient"))
+
+                db.session.add(
+                PatientProcedure(
+                        patient_id=patient.id,
+                        procedure_id=int(procedure_id),
+                        price=tariff.price
+                    )
+                )
+
+                total_price += tariff.price
+
+            patient.total_price = total_price
+
+            db.session.commit()
+
+            flash("بیمار با موفقیت ثبت شد.", "success")
+            return redirect(url_for("main_up.add_patient"))
+
+        except Exception as e:
+            db.session.rollback()
+            flash("خطا در ثبت اطلاعات بیمار.", "danger")
+
+            insurances = Insurance.query.order_by(Insurance.name).all()
+            procedures = Procedure.query.order_by(Procedure.name).all()
+
+            return render_template("add_patient.html",
+            insurances=insurances,
+            procedures=procedures
     )
-
-    try:
-
-        db.session.add(patient)
-        db.session.flush()
-
-        total_price = 0
-
-        for procedure_id in procedure_ids:
-
-            tariff = Tariff.query.filter_by(
-                insurance_id=patient.insurance_id,
-                procedure_id=int(procedure_id)
-            ).first()
-
-            if tariff is None:
-                db.session.rollback()
-                flash("برای یکی از خدمات تعرفه ثبت نشده است")
-                return redirect(url_for("main_up.add_patient"))
-
-            pp = PatientProcedure(
-                patient_id=patient.id,
-                procedure_id=int(procedure_id),
-                price=tariff.price
-            )
-
-            db.session.add(pp)
-
-            total_price += tariff.price
-
-        patient.total_price = total_price
-
-        db.session.commit()
-
-        flash("بیمار با موفقیت ثبت شد", "success")
-
-        return redirect(url_for("main_up.add_patient"))
-
-    except IntegrityError:
-        db.session.rollback()
-        flash("خطا در ثبت بیمار")
-        print("pathient saved")
-        return redirect(url_for("main_up.dashboard"))
-        insurances = Insurance.query.all()
-    procedures = Procedure.query.all()
-    return render_template("add_patient.html" , insurances= insurances , procedures = procedures  )
 
  # روت داشبورد
 @main_up.route("/dashboard") 

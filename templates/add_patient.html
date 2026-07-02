@@ -94,43 +94,6 @@
         </div>
     </div>
 </form>
-</div>
-<div class="card">
-
-    <label><strong>خدمات</strong></label>
-
-    <div id="procedures">
-
-        <div class="procedure-row">
-
-            <select name="procedure_ids" required>
-
-                <option value="">انتخاب خدمت</option>
-
-                {% for procedure in procedures %}
-                <option value="{{ procedure.id }}">
-                    {{ procedure.name }}
-                </option>
-                {% endfor %}
-
-            </select>
-
-        </div>
-
-    </div>
-
-    <br>
-
-    <button
-        type="button"
-        id="add-procedure"
-        class="btn btn-primary">
-
-        + افزودن خدمت
-
-    </button>
-
-</div>
 
 <script>
 
