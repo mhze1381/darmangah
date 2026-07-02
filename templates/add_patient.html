@@ -20,9 +20,16 @@
     <input type="text" name="phone" placeholder="شماره تماس">
 
     <input type="number" name="age" placeholder="سن">
-
-    <input type="text" name="gender" placeholder="جنسیت">
-    
+    <div class="gender-group">
+        <label>
+            <input type="radio" name="gender" value="مذکر">
+             مذکر
+        </label>
+        <label>
+            <input type="radio" name="gender" value="مونث">
+            مونث
+        </label>
+    </div>
     <select name="insurance_id" required>
         {% for insurance in insurances %}
         <option value="{{insurance.id}}">
@@ -38,14 +45,13 @@
         </option>
         {% endfor %}
     </select>
-  
-        <div class="submit">
-        <textarea name="description" placeholder="توضیحات"></textarea><br><br>
+        <textarea class="full" name="description" placeholder="توضیحات"></textarea>
+        <div class="buttons full">
         <button type="submit"> ثبت بیمار</button>
         <a href="/dashboard" class="back-btn">بازگشت</a>
         </div>
-</form>
     </div>
+</form>
 </div>
 </body>
 </html>
