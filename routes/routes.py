@@ -1,7 +1,7 @@
 from flask import Blueprint  , render_template
 from flask_login import login_user , logout_user , login_required
 from flask import Blueprint , render_template , request , redirect , url_for 
-from models import User , Patient , Insurance , Procedure  , Tariff
+from models import User , Patient , Insurance , Procedure  , Tariff,PatientProcedure
 from extension import db
 from sqlalchemy import or_
 from werkzeug.security import check_password_hash
@@ -48,58 +48,76 @@ def logout():
 @login_required
 def add_patient():
     if request.method == "POST":
-        print("POST RECEIVED")
         national_code = request.form["national_code"].strip()
-        if not national_code.isdigit() or len(national_code) != 10:
-            flash("کد ملی باید دقیقاً ۱۰ رقم باشد.")
-            return redirect(url_for("main_up.add_patient"))
-        tariff = Tariff.query.filter_by(
-            insurance_id = int(request.form["insurance_id"]),
-            procedure_id = int(request.form["procedure_id"])).first()
 
-        if tariff is None : 
-            return "برای این بیمه و خدمت ثبت نشده است"
-        exists = Patient.query.filter_by(
-            national_code=request.form["national_code"]).first()
-        if exists :
-            flash (" بیماری قبلا با این کد ملی ثبت شده است")
-            return redirect(url_for("main_up.add_patient"))
-        patient = Patient(
+    if not national_code.isdigit() or len(national_code) != 10:
+        flash("کد ملی باید دقیقاً ۱۰ رقم باشد.")
+        return redirect(url_for("main_up.add_patient"))
+    procedure_ids = request.form.getlist("procedure_ids")
+
+    exists = Patient.query.filter_by(
+        national_code=national_code
+    ).first()
+
+    if exists:
+        flash("بیماری قبلاً با این کد ملی ثبت شده است")
+        return redirect(url_for("main_up.add_patient"))
+
+    patient = Patient(
         full_name=request.form["full_name"],
+        national_code=national_code,
         phone=request.form["phone"],
         age=request.form["age"],
         gender=request.form["gender"],
-        description=request.form["description"] ,
-        insurance_id = request.form["insurance_id"],total_price=0 , paid_price = 0
-        procedure_ids = request.form.getlist("procedure_ids"))
-        try :
-            db.session.add(patient)
-            db.session.flush()
-            total_price = 0
-            for procedure_id in procedure_ids :
-             tariff = Tariff.query.filter_by(
-            insurance_id=patient.insurance_id,
-            procedure_id=procedure_id
+        description=request.form["description"],
+        insurance_id=int(request.form["insurance_id"]),
+        total_price=0,
+        paid_price=0
+    )
+
+    try:
+
+        db.session.add(patient)
+        db.session.flush()
+
+        total_price = 0
+
+        for procedure_id in procedure_ids:
+
+            tariff = Tariff.query.filter_by(
+                insurance_id=patient.insurance_id,
+                procedure_id=int(procedure_id)
             ).first()
 
-        if tariff :
-        pp = PatientProcedure(
-            patient_id=patient.id,
-            procedure_id=procedure_id,
-            price=tariff.price)
-        db.session.add(pp)
-        total_price += tariff.price
+            if tariff is None:
+                db.session.rollback()
+                flash("برای یکی از خدمات تعرفه ثبت نشده است")
+                return redirect(url_for("main_up.add_patient"))
+
+            pp = PatientProcedure(
+                patient_id=patient.id,
+                procedure_id=int(procedure_id),
+                price=tariff.price
+            )
+
+            db.session.add(pp)
+
+            total_price += tariff.price
+
         patient.total_price = total_price
+
         db.session.commit()
-        print ( "flash")
-        flash ("بیمار با موفقیت ثبت شد" , "seccess")
+
+        flash("بیمار با موفقیت ثبت شد", "success")
+
         return redirect(url_for("main_up.add_patient"))
-        except IntegrityError :
-            db.session.rollback()
-            flash ("کد ملی قبلا ثبت شده است")
+
+    except IntegrityError:
+        db.session.rollback()
+        flash("خطا در ثبت بیمار")
         print("pathient saved")
         return redirect(url_for("main_up.dashboard"))
-    insurances = Insurance.query.all()
+        insurances = Insurance.query.all()
     procedures = Procedure.query.all()
     return render_template("add_patient.html" , insurances= insurances , procedures = procedures  )
 
