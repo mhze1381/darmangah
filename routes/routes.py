@@ -56,6 +56,7 @@ def add_patient():
         tariff = Tariff.query.filter_by(
             insurance_id = int(request.form["insurance_id"]),
             procedure_id = int(request.form["procedure_id"])).first()
+
         if tariff is None : 
             return "برای این بیمه و خدمت ثبت نشده است"
         exists = Patient.query.filter_by(
@@ -69,15 +70,30 @@ def add_patient():
         age=request.form["age"],
         gender=request.form["gender"],
         description=request.form["description"] ,
-        insurance_id = request.form["insurance_id"],
-        procedure_id = request.form["procedure_id"],
-        total_price = tariff.price , paid_price = 0)
+        insurance_id = request.form["insurance_id"],total_price=0 , paid_price = 0
+        procedure_ids = request.form.getlist("procedure_ids"))
         try :
             db.session.add(patient)
-            db.session.commit()
-            print ( "flash")
-            flash ("بیمار با موفقیت ثبت شد" , "seccess")
-            return redirect(url_for("main_up.add_patient"))
+            db.session.flush()
+            total_price = 0
+            for procedure_id in procedure_ids :
+             tariff = Tariff.query.filter_by(
+            insurance_id=patient.insurance_id,
+            procedure_id=procedure_id
+            ).first()
+
+        if tariff :
+        pp = PatientProcedure(
+            patient_id=patient.id,
+            procedure_id=procedure_id,
+            price=tariff.price)
+        db.session.add(pp)
+        total_price += tariff.price
+        patient.total_price = total_price
+        db.session.commit()
+        print ( "flash")
+        flash ("بیمار با موفقیت ثبت شد" , "seccess")
+        return redirect(url_for("main_up.add_patient"))
         except IntegrityError :
             db.session.rollback()
             flash ("کد ملی قبلا ثبت شده است")
