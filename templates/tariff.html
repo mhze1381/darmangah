@@ -1,80 +1,115 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <title>تعرفه‌ها</title>
-    <link rel="stylesheet" href="{{ url_for('static' , filename='css/crud.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}مدیریت تعرفه‌ها{% endblock %}
 
-<h2>ثبت تعرفه</h2>
+{% block content %}
 
-<form method="POST">
+<div class="page-header">
 
-    <label>بیمه</label>
-    <select name="insurance_id" required>
-        {% for insurance in insurances %}
-        <option value="{{ insurance.id }}">
-            {{ insurance.name }}
-        </option>
-        {% endfor %}
-    </select>
-
-    <br><br>
-
-    <label>خدمت</label>
-    <select name="procedure_id" required>
-        {% for procedure in procedures %}
-        <option value="{{ procedure.id }}">
-            {{ procedure.name }}
-        </option>
-        {% endfor %}
-    </select>
-
-    <br><br>
-
-    <label>قیمت</label>
-    <input type="number" name="price" required>
-
-    <br><br>
-
-    <button type="submit">ثبت تعرفه</button>
-
-</form>
-
-<hr>
-
-<h3>تعرفه‌های ثبت‌شده</h3>
-
-<table border="1">
-    <tr>
-        <th>بیمه</th>
-        <th>خدمت</th>
-        <th>قیمت</th>
-        <th> عملیات</th>
-    </tr>
-
-    {% for tariff in tariffs %}
-    <tr>
-<td>{{ tariff.insurance.name }}</td>
-<td>{{ tariff.procedure.name }}</td>
-<td>{{ "{:,}".format(tariff.price) }}</td>
-
-<td>
-    <a href="{{ url_for('main_up.edit_tariff', id=tariff.id) }}">
-        ویرایش
+    <a href="{{ url_for('main_up.dashboard') }}" class="btn btn-secondary">
+        ← بازگشت به داشبورد
     </a>
-</td>
-<td>
-    <a href="{{ url_for('main_up.delete_tariff', id=tariff.id) }}">
-        حذف
-    </a>
-</td>
 
-    </tr>
-    {% endfor %}
-</table>
+    <h2>مدیریت تعرفه‌ها</h2>
 
-<a href="/dashboard">بازگشت به داشبورد</a>
-</body>
-</html>
+</div>
+
+<div class="card">
+
+    <h3>ثبت تعرفه جدید</h3>
+
+    <form method="POST">
+
+        <label>بیمه</label>
+        <select name="insurance_id" required>
+            {% for insurance in insurances %}
+            <option value="{{ insurance.id }}">
+                {{ insurance.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label>خدمت</label>
+        <select name="procedure_id" required>
+            {% for procedure in procedures %}
+            <option value="{{ procedure.id }}">
+                {{ procedure.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label>قیمت</label>
+        <input
+            type="number"
+            name="price"
+            placeholder="قیمت تعرفه"
+            min="0"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit" class="btn btn-success">
+            ثبت تعرفه
+        </button>
+
+    </form>
+
+</div>
+
+<div class="card">
+
+    <h3>لیست تعرفه‌ها</h3>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>بیمه</th>
+                <th>خدمت</th>
+                <th>قیمت</th>
+                <th colspan="2">عملیات</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for tariff in tariffs %}
+
+        <tr>
+
+            <td>{{ loop.index }}</td>
+            <td>{{ tariff.insurance.name }}</td>
+            <td>{{ tariff.procedure.name }}</td>
+            <td>{{ tariff.price }}</td>
+
+            <td>
+                <a href="{{ url_for('main_up.edit_tariff', id=tariff.id) }}"
+                   class="btn btn-warning">
+                    ویرایش
+                </a>
+            </td>
+
+            <td>
+                <a href="{{ url_for('main_up.delete_tariff', id=tariff.id) }}"
+                   class="btn btn-danger"
+                   onclick="return confirm('از حذف این تعرفه مطمئن هستید؟')">
+                    حذف
+                </a>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
