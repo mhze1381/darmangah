@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <title>مدیریت بیمه‌ها</title>
-    <link rel="stylesheet" href="{{ url_for('static' , filename='css/crud.css') }}">
-</head>
-<body>
-
+{% extends "base.html"%}
+{% block title  %} مدیریت بیمه ها{% endblock%}
+{% block content  %}
     <h2>ثبت بیمه جدید</h2>
 
     <form method="POST">
@@ -50,5 +44,4 @@
     </table>
 
 <a href="/dashboard">بازگشت به داشبورد</a>
-</body>
-</html>
+{% endblock%}

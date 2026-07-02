@@ -49,6 +49,10 @@ def logout():
 def add_patient():
     if request.method == "POST":
         print("POST RECEIVED")
+        national_code = request.form["national_code"].strip()
+        if not national_code.isdigit() or len(national_code) != 10:
+            flash("کد ملی باید دقیقاً ۱۰ رقم باشد.")
+            return redirect(url_for("main_up.add_patient"))
         tariff = Tariff.query.filter_by(
             insurance_id = int(request.form["insurance_id"]),
             procedure_id = int(request.form["procedure_id"])).first()
@@ -61,7 +65,6 @@ def add_patient():
             return redirect(url_for("main_up.add_patient"))
         patient = Patient(
         full_name=request.form["full_name"],
-        national_code=request.form["national_code"],
         phone=request.form["phone"],
         age=request.form["age"],
         gender=request.form["gender"],
@@ -98,7 +101,7 @@ def dashboard():
         )
         ).all()
     else:
-        patients = Patient.query.all()
+        patients = Patient.query.order_by(Patient.created_at.desc()).all()
         patient_count= Patient.query.count()
         insurance_count = Patient.query.count()
         procedure_count = Patient.query.count()

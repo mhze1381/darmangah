@@ -26,7 +26,8 @@
     <div  class="form-grid">
     <input type="text" name="full_name" placeholder="نام و نام خانوادگی" required>
 
-    <input type="text" name="national_code" placeholder="کد ملی" required>
+    <input type="text" name="national_code"  minlength="10" maxlength="10" ,
+      pattern="[0-9]{10}" placeholder="کد ملی" required>
 
     <input type="text" name="phone" placeholder="شماره تماس">
 
