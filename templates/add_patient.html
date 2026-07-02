@@ -49,14 +49,44 @@
         </option>
         {% endfor %}
     </select>
+<div class="card">
 
-     <select name="procedure_id"  class="procedure" required>
-        {% for procedure in procedures %}
-        <option value="{{procedure.id}}">
-            {{ procedure.name}}
-        </option>
-        {% endfor %}
-    </select>
+    <label><strong>خدمات</strong></label>
+
+    <div id="procedures">
+
+        <div class="procedure-row">
+
+            <select name="procedure_ids" required>
+
+                <option value="">انتخاب خدمت</option>
+
+                {% for procedure in procedures %}
+                <option value="{{ procedure.id }}">
+                    {{ procedure.name }}
+                </option>
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <button
+        type="button"
+        id="add-procedure"
+        class="btn btn-primary">
+
+        + افزودن خدمت
+
+    </button>
+
+</div>
+
+
         <textarea class="full" name="description" placeholder="توضیحات"></textarea>
         <div class="buttons full">
         <button type="submit"> ثبت بیمار</button>
@@ -65,5 +95,91 @@
     </div>
 </form>
 </div>
+<div class="card">
+
+    <label><strong>خدمات</strong></label>
+
+    <div id="procedures">
+
+        <div class="procedure-row">
+
+            <select name="procedure_ids" required>
+
+                <option value="">انتخاب خدمت</option>
+
+                {% for procedure in procedures %}
+                <option value="{{ procedure.id }}">
+                    {{ procedure.name }}
+                </option>
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <button
+        type="button"
+        id="add-procedure"
+        class="btn btn-primary">
+
+        + افزودن خدمت
+
+    </button>
+
+</div>
+
+<script>
+
+document.getElementById("add-procedure").addEventListener("click", function(){
+
+    const container = document.getElementById("procedures");
+
+    const row = document.createElement("div");
+
+    row.className = "procedure-row";
+
+    row.style.marginTop = "10px";
+
+    row.innerHTML = `
+        <select name="procedure_ids" required>
+
+            <option value="">انتخاب خدمت</option>
+
+            {% for procedure in procedures %}
+            <option value="{{ procedure.id }}">
+                {{ procedure.name }}
+            </option>
+            {% endfor %}
+
+        </select>
+
+        <button
+            type="button"
+            class="btn btn-danger remove-procedure">
+
+            حذف
+
+        </button>
+    `;
+
+    container.appendChild(row);
+
+});
+
+document.addEventListener("click", function(e){
+
+    if(e.target.classList.contains("remove-procedure")){
+
+        e.target.parentElement.remove();
+
+    }
+
+});
+
+</script>
 </body>
 </html>

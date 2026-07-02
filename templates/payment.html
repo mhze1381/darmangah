@@ -1,18 +1,44 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-<link rel="stylesheet" href="{{ url_for('static' , filename='css/crud.css') }}">
-</head>
-<body>
-<h2>{{ patient.full_name }}</h2>
+{% extends "base.html" %}
+{% block title %}ثبت پرداخت{% endblock %}
 
-<p>مبلغ کل: {{ patient.total_price }}</p>
-<p>پرداخت شده: {{ patient.paid_price }}</p>
+{% block content %}
 
-<form method="POST">
-    <input type="number" name="amount" placeholder="مبلغ پرداختی">
-    <button type="submit">ثبت پرداخت</button>
-</form>
+<div class="page-header">
+    <a href="{{ url_for('main_up.dashboard') }}" class="btn btn-secondary">
+        ← بازگشت به داشبورد
+    </a>
 
-</body>
-</html>
+    <h2>ثبت پرداخت</h2>
+</div>
+
+<div class="card">
+
+    <h3>{{ patient.full_name }}</h3>
+
+    <p><strong>مبلغ کل:</strong> {{ patient.total_price }} تومان</p>
+
+    <p><strong>پرداخت شده:</strong> {{ patient.paid_price }} تومان</p>
+
+    <p><strong>باقیمانده:</strong> {{ patient.total_price - patient.paid_price }} تومان</p>
+
+    <hr>
+
+    <form method="POST" class="insurance-form">
+
+        <input
+            type="number"
+            name="amount"
+            placeholder="مبلغ پرداختی"
+            min="1"
+            required
+        >
+
+        <button type="submit" class="btn btn-success">
+            ثبت پرداخت
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

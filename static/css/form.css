@@ -40,6 +40,16 @@ body{
     box-shadow:0 15px 35px rgba(0,0,0,.35);
 }
 
+.procedure-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-top:10px;
+}
+
+.procedure-row select{
+    flex:1;
+}
 .container h1 ,
 .container h2{
     text-align:center;

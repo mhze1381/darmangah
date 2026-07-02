@@ -21,6 +21,24 @@ class Tariff(db.Model):
     insurance = db.relationship("Insurance")
     procedure = db.relationship("Procedure")
 
+class PatientProcedure(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    patient_id = db.Column(
+    db.Integer,
+    db.ForeignKey("patient.id"),
+    nullable=False)
+    procedure_id = db.Column(
+    db.Integer,
+    db.ForeignKey("procedure.id"),
+    nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    patient = db.relationship(
+    "Patient",
+    backref="patient_procedures")
+    procedure = db.relationship("Procedure")
+
+
 
 class Patient(db.Model):
 
@@ -35,9 +53,8 @@ class Patient(db.Model):
     paid_price = db.Column(db.Integer , default=0)
     created_at= db.Column(db.DateTime , default = datetime.now)
     insurance_id = db.Column (db.Integer , db.ForeignKey("insurance.id") , nullable=False )
-    procedure_id = db.Column (db.Integer , db.ForeignKey("procedure.id") , nullable=False )
     insurance = db.relationship("Insurance")
-    procedure = db.relationship("Procedure")
+   
   
 
 
