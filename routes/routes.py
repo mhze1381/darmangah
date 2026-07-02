@@ -48,6 +48,7 @@ def logout():
 @login_required
 def add_patient():
     if request.method == "POST":
+        print("POST RECEIVED")
         tariff = Tariff.query.filter_by(
             insurance_id = int(request.form["insurance_id"]),
             procedure_id = int(request.form["procedure_id"])).first()
@@ -56,7 +57,8 @@ def add_patient():
         exists = Patient.query.filter_by(
             national_code=request.form["national_code"]).first()
         if exists :
-            return " بیماری قبلا با این کد ملی ثبت شده است"
+            flash (" بیماری قبلا با این کد ملی ثبت شده است")
+            return redirect(url_for("main_up.add_patient"))
         patient = Patient(
         full_name=request.form["full_name"],
         national_code=request.form["national_code"],
@@ -70,14 +72,12 @@ def add_patient():
         try :
             db.session.add(patient)
             db.session.commit()
-            flash ("بیمار با موفقیت ثبت شد")
+            print ( "flash")
+            flash ("بیمار با موفقیت ثبت شد" , "seccess")
             return redirect(url_for("main_up.add_patient"))
         except IntegrityError :
-            db.session.rollback
+            db.session.rollback()
             flash ("کد ملی قبلا ثبت شده است")
-            
-
-        
         print("pathient saved")
         return redirect(url_for("main_up.dashboard"))
     insurances = Insurance.query.all()
@@ -103,7 +103,7 @@ def dashboard():
         insurance_count = Patient.query.count()
         procedure_count = Patient.query.count()
         total_income = db.session.query(db.func.sum(Patient.total_price)).scalar() or 0
-        received = db.session.query(db.func.sum(Patient.total_price)).scalar() or 0
+        received = db.session.query(db.func.sum(Patient.paid_price)).scalar() or 0
         remaining = total_income - received
     return render_template("dashboard.html" , patients = patients , patient_count=patient_count ,insurance_count=insurance_count ,
          procedure_count=procedure_count , total_income=total_income ,received=received , remaining =remaining)
