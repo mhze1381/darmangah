@@ -8,6 +8,8 @@ from werkzeug.security import check_password_hash
 import os
 import shutil
 from datetime import datetime
+from flask import  flash , redirect , url_for 
+from sqlalchemy.exc import IntegrityError
 
 main_up = Blueprint("main_up" , __name__)
 login_bp = Blueprint("login" , __name__)
@@ -51,6 +53,10 @@ def add_patient():
             procedure_id = int(request.form["procedure_id"])).first()
         if tariff is None : 
             return "برای این بیمه و خدمت ثبت نشده است"
+        exists = Patient.query.filter_by(
+            national_code=request.form["national_code"]).first()
+        if exists :
+            return " بیماری قبلا با این کد ملی ثبت شده است"
         patient = Patient(
         full_name=request.form["full_name"],
         national_code=request.form["national_code"],
@@ -61,8 +67,17 @@ def add_patient():
         insurance_id = request.form["insurance_id"],
         procedure_id = request.form["procedure_id"],
         total_price = tariff.price , paid_price = 0)
-        db.session.add(patient)
-        db.session.commit()
+        try :
+            db.session.add(patient)
+            db.session.commit()
+            flash ("بیمار با موفقیت ثبت شد")
+            return redirect(url_for("main_up.add_patient"))
+        except IntegrityError :
+            db.session.rollback
+            flash ("کد ملی قبلا ثبت شده است")
+            
+
+        
         print("pathient saved")
         return redirect(url_for("main_up.dashboard"))
     insurances = Insurance.query.all()
