@@ -1,10 +1,1 @@
-@main_up.route("/add_patient", methods=["GET", "POST"])
-def add_patient():
-    if request.method == "POST":
-        national_code = request.form["national_code"].strip()
 
-        if not national_code.isdigit() or len(national_code) != 10:
-            flash("کد ملی باید دقیقاً ۱۰ رقم باشد.")
-            return redirect(url_for("main_up.add_patient"))
-
-        # ادامه ثبت بیمار...
