@@ -57,7 +57,7 @@
     <tr>
 <td>{{ tariff.insurance.name }}</td>
 <td>{{ tariff.procedure.name }}</td>
-<td>{{ tariff.price }}</td>
+<td>{{ "{:,}".format(tariff.price) }}</td>
 
 <td>
     <a href="{{ url_for('main_up.edit_tariff', id=tariff.id) }}">

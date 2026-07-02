@@ -1,5 +1,6 @@
 from extension import db 
 from flask_login import UserMixin
+from datetime import datetime
 class User(UserMixin ,db.Model):
     id = db.Column( db.Integer , primary_key=True )
     username = db.Column(db.String(80) , unique=True , nullable=False )
@@ -29,10 +30,10 @@ class Patient(db.Model):
     phone = db.Column(db.String(20))
     age = db.Column(db.Integer)
     gender = db.Column(db.String(10))
-
     description = db.Column(db.Text)
     total_price = db.Column(db.Integer , default=0)
     paid_price = db.Column(db.Integer , default=0)
+    created_at= db.Column(db.DateTime , default = datetime.now)
     insurance_id = db.Column (db.Integer , db.ForeignKey("insurance.id") , nullable=False )
     procedure_id = db.Column (db.Integer , db.ForeignKey("procedure.id") , nullable=False )
     insurance = db.relationship("Insurance")

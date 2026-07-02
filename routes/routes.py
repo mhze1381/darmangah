@@ -267,7 +267,7 @@ def backup():
     backup_folder = "backup"
     if not os.path.exists(backup_folder):
         os.makedirs(backup_folder)
-        filename = datatime.now().strftime("%y-%m-%d-%H-%M-%S.db")
+        filename = datetime.now().strftime("%y-%m-%d-%H-%M-%S.db")
         destination = os.path.join(backup_folder , filename)
         shutil.copy(source , destination)
         return "بکاپ با موفقیت گرفته شد"

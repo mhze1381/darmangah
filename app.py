@@ -4,8 +4,16 @@ from config import Config
 from extension  import db , login_manager
 from models import User 
 from werkzeug.security import generate_password_hash 
+import jdatetime
 
 app = Flask(__name__)
+
+@app.template_filter("jalali")
+def jalali(date):
+    if not date :
+        return ""
+    return jdatetime.datetime.fromgregorian(datetime=date).strftime("%H:%M  %Y-%m-%d")
+
 app.config.from_object(Config)
 db.init_app(app)
 login_manager.init_app(app)

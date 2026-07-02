@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>ثبت بیمار</title>
+    <link rel="stylesheet" href="{{ url_for('static' , filename='css/form.css')}}">
 </head>
+
 <body>
 
+<div class="container">
 <h2>ثبت بیمار</h2>
 
 <form method="POST">
+    <div  class="form-grid">
+    <input type="text" name="full_name" placeholder="نام و نام خانوادگی" required>
 
-    <input type="text" name="full_name" placeholder="نام و نام خانوادگی" required><br><br>
+    <input type="text" name="national_code" placeholder="کد ملی" required>
 
-    <input type="text" name="national_code" placeholder="کد ملی" required><br><br>
+    <input type="text" name="phone" placeholder="شماره تماس">
 
-    <input type="text" name="phone" placeholder="شماره تماس"><br><br>
+    <input type="number" name="age" placeholder="سن">
 
-    <input type="number" name="age" placeholder="سن"><br><br>
-
-    <input type="text" name="gender" placeholder="جنسیت"><br><br>
+    <input type="text" name="gender" placeholder="جنسیت">
+    
     <select name="insurance_id" required>
         {% for insurance in insurances %}
         <option value="{{insurance.id}}">
@@ -27,18 +31,21 @@
         {% endfor %}
     </select>
 
-     <select name="procedure_id" required>
+     <select name="procedure_id"  class="procedure" required>
         {% for procedure in procedures %}
         <option value="{{procedure.id}}">
             {{ procedure.name}}
         </option>
         {% endfor %}
     </select>
-
-    <textarea name="description" placeholder="توضیحات"></textarea><br><br>
-    <button type="submit"> ثبت بیمار</button>
-
+  
+        <div class="submit">
+        <textarea name="description" placeholder="توضیحات"></textarea><br><br>
+        <button type="submit"> ثبت بیمار</button>
+        <a href="/dashboard" class="back-btn">بازگشت</a>
+        </div>
 </form>
-
+    </div>
+</div>
 </body>
 </html>

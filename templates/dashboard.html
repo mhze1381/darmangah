@@ -64,14 +64,15 @@
                 <span> تعداد خدمات </span>
             </div>
             <div class="card">
-                <h3>{{ total_income }}</h3>
-                <span>درآمد دریافتی</span>
+                <h3>{{ "{:,}".format(total_income) }}</h3>
+                <span>درآمد </span>
+            </div>
             <div class="card">
-                <h3>{{ received }}</h3>
+                <h3>{{ "{:,}".format(received) }}</h3>
                 <span>دریافتی</span>
             </div>
             <div class="card">
-                <h3>{{ remaining }}</h3>
+                <h3>{{ "{:,}".format(remaining) }}</h3>
                 <span>باقیمانده</span>
             </div>
         </div>
@@ -93,6 +94,7 @@
                 <th>تلفن</th>
                 <th>سن</th>
                 <th>جنسیت</th>
+                <th> تاریخ ثبت</th>
                 <th>هزینه</th>
                 <th>پرداختی</th>
                 <th>مانده</th>
@@ -109,9 +111,10 @@
                 <td>{{patient.phone}}</td>
                 <td>{{patient.age}}</td>
                 <td>{{patient.gender}}</td>
-                <td>{{patient.total_price}}</td>
-                <td>{{patient.paid_price}}</td>
-                <td>{{patient.total_price-patient.paid_price}}</td>
+                <td>{{ patient.created_at|jalali}}</td>
+                <td>{{ "{:,}".format(patient.total_price) }}</td>
+                <td>{{ "{:,}".format(patient.paid_price) }}</td>
+                <td>{{ "{:,}".format(patient.total_price-patient.paid_price) }}</td>
 
                 <td>
 
@@ -132,9 +135,6 @@
     </main>
 
 </div>
-<div>
-
 <script src="{{ url_for('static' , filename='js/dashboard.js')}}"></script>
-</div>
 </body>
 </html>
