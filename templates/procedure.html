@@ -1,39 +1,86 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <title>خدمات </title>
-    <link rel="stylesheet" href="{{ url_for('static' , filename='css/crud.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}مدیریت خدمات{% endblock %}
 
-<h2>ثبت خدمت</h2>
+{% block content %}
 
-<form method="POST">
-    <input type="text" name="name" placeholder= " نام خدمت" required>
-    <button type="submit">ثبت</button>
-</form>
-{% for procedure in procedures %}
-<tr>
-    <td>{{ procedure.name }}</td>
+<div class="page-header">
 
-    <td>
-                <a href="{{ url_for('main_up.edit_procedure', id=procedure.id) }}">
+    <a href="{{ url_for('main_up.dashboard') }}" class="btn btn-secondary">
+        ← بازگشت به داشبورد
+    </a>
+
+    <h2>مدیریت خدمات</h2>
+
+</div>
+
+<div class="card">
+
+    <h3>ثبت خدمت جدید</h3>
+
+    <form method="POST" class="insurance-form">
+
+        <input
+            type="text"
+            name="name"
+            placeholder="نام خدمت"
+            required
+        >
+
+        <button type="submit" class="btn btn-success">
+            ثبت خدمت
+        </button>
+
+    </form>
+
+</div>
+
+<div class="card">
+
+    <h3>لیست خدمات</h3>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>نام خدمت</th>
+                <th colspan="2">عملیات</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for procedure in procedures %}
+
+        <tr>
+
+            <td>{{ loop.index }}</td>
+
+            <td>{{ procedure.name }}</td>
+
+            <td>
+                <a href="{{ url_for('main_up.edit_procedure', id=procedure.id) }}"
+                   class="btn btn-warning">
                     ویرایش
                 </a>
             </td>
+
             <td>
                 <a href="{{ url_for('main_up.delete_procedure', id=procedure.id) }}"
+                   class="btn btn-danger"
                    onclick="return confirm('از حذف این خدمت مطمئن هستید؟')">
                     حذف
                 </a>
             </td>
-</tr>
-<hr>
 
+        </tr>
 
-{% endfor %}
+        {% endfor %}
 
-<a href="/dashboard">بازگشت به داشبورد</a>
-</body>
-</html>
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
