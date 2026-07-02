@@ -1,1 +1,23 @@
+class PatientProcedure(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
 
+    patient_id = db.Column(
+        db.Integer,
+        db.ForeignKey("patient.id"),
+        nullable=False
+    )
+
+    procedure_id = db.Column(
+        db.Integer,
+        db.ForeignKey("procedure.id"),
+        nullable=False
+    )
+
+    price = db.Column(db.Integer, nullable=False)
+
+    patient = db.relationship(
+        "Patient",
+        backref="patient_procedures"
+    )
+
+    procedure = db.relationship("Procedure")
